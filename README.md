@@ -1,4 +1,4 @@
-# Serverless TODO
+# Serverless Library App
 ### Running the application 
 ```
   cd client
