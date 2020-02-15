@@ -15,3 +15,18 @@ h6 {
 .logo{
   width: 170px;
 }
+
+.addBook{
+    background: #67E081;
+    color: black;
+    padding: 6px 20px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    top: 30px;
+    right: 120px;
+    font-size: 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}

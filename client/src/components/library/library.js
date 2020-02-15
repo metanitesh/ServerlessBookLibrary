@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Header from "./../header/header"
 import style from "./library.module.css"
+import {getBooks, deleteBook} from "../api/library"
+
 
 class Library extends Component {
   _isRedirect = false;
@@ -9,80 +11,85 @@ class Library extends Component {
   constructor(props){
     super(props);
     this.state = {
-      categories: [],
+      categories: ['Productivity', 'Economics', 'History', 'Science'],
       books: [],
-      selectedCategory: false
+      userId: false,
+      deleteBookId:false
     }
   
     this.logout = this.logout.bind(this);
+    this.handleBrokenImage = this.handleBrokenImage.bind(this);
   
   }
 
   componentWillMount(){
-    if(!this.props.authStatus){
+    if(!this.props.auth.isAuthenticated()){
+      
       this.props.history.push('/')
       this._isRedirect = true;
+    }else{
+      this.setState({
+        userId: this.props.auth.getUserId()
+      })
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     if(!this._isRedirect){
-      fetch("https://ancient-springs-73658.herokuapp.com/categories")
-      .then((response) => {
-        return response.json();
+      const result = await getBooks(this.props.auth.getIdToken());
+      
+      this.setState({
+          books: result
       })
-      .then((response) =>{
-          this.setState({
-            categories: response.categories
-          })
-        
-      });
-
-      fetch("https://ancient-springs-73658.herokuapp.com/books")
-      .then((response) => {
-        return response.json();
-      })
-      .then((response) =>{        
-          this.setState({
-            books: response.books
-          })
-        
-      });
+      
     }
-  }
-
-  setCategory(categoryId){
-    this.setState({
-      selectedCategory: categoryId
-    })
   }
 
   logout(){
-    this.props.logout();
-    this.props.history.push('/')   
+    this.props.auth.logout();
   }
 
+  handleBrokenImage(event){
+    event.target.src = "./default-book.png"
+  }
+
+  async handleDelete(event, id){
+    event.preventDefault();
+    const result = await deleteBook(this.props.auth.getIdToken(), id);
+    alert("book delete successful");
+    console.log(result)
+    this.setState({
+      books: this.state.books.filter(book => book.id != id)
+    })
+
+    
+  }
 
   render() {
     const categoryListDom = this.state.categories.map((category) => {
-      return <li key={category.id} onClick={() => { this.setCategory(category.id) }}>{category.title}</li>
+      return <li key={category}>{category}</li>
     })
+
+    
 
     const bookListDom = this.state
     .books
-    .filter((book) => {
-      if(this.state.selectedCategory){
-        return book.category_id === this.state.selectedCategory
-      }else{
-        return true
-      }
-    })
     .map((book) => {
+
+      let deleteMarkup = false
+      if(book.userId === this.state.userId){
+        deleteMarkup = <button className={style.deleteButton}  onClick={e => this.handleDelete(e, book.id)}>Delete</button>
+      }else{
+        deleteMarkup = <></>
+      }
+
       return <li key={book.id}>
       <Link to= {`/book/${book.id}`}>
-      <img  alt='bookImage' src={book.image_url} />
+      <img  alt='bookImage'  onError={this.handleBrokenImage} src={book.attachmentUrl} />
       <h5>{book.title}</h5>
-      <p className={style.read}>Read</p>
+      <p className={style.description}>Read</p>
+      
+      {deleteMarkup}
       </Link>
       </li>
     })
@@ -91,6 +98,7 @@ class Library extends Component {
     return (
       <>
       <Header pageName="discovery" accessType={this.props.accessType}/>
+      <Link className={style.addBook} to="/addbook">Add-Book</Link>
       <button className='logout' onClick={this.logout}> logout </button>
       <main className={style.library}>
         <section className={style.categories}>

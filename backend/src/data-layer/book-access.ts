@@ -25,21 +25,21 @@ export class BookAccess {
     return items as Book[]
   }
 
-  // async getAllTodos(userId: string): Promise<Todo[]> {
+  async getBook(bookId:string): Promise<Book> {
 
-  //   const result = await this.docClient.query({
-  //     TableName : this.bookTable,
-  //     KeyConditionExpression: 'userId = :userId',
-  //     IndexName: this.bookIndex,
-  //     ExpressionAttributeValues: {
-  //         ':userId': userId
-  //     }
-  //   }).promise()
+    const result = await this.docClient.query({
+        TableName : this.bookTable,
+        KeyConditionExpression: 'id = :bookId',
+        ExpressionAttributeValues: {
+        ':bookId': bookId
+      }
+    }).promise()
 
 
-  //   const items = result.Items
-  //   return items as Todo[]
-  // }
+    const items = result.Items[0]
+    return items as Book
+  }
+
 
   async createBook(book: Book) : Promise<Book>{
     

@@ -3,42 +3,28 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Home from '../home/home';
 import Library from '../library/library';
 import Book from '../book/book';
+import AddBook from '../book/add-book';
+import Auth from '../auth/auth';
+import createHistory from 'history/createBrowserHistory';
+import Callback from '../auth/callback'
+const history = createHistory({forceRefresh:true});
+const auth = new Auth(history)
+
 
 class App extends Component {
 
   constructor(props){
     super(props);
     this.state ={
-      authenticated : false,
-      userId: null,
-      accessType:'Free'
     }
-
-    this.login = this.login.bind(this)
-    this.logout = this.logout.bind(this)
-    this.subscribe = this.subscribe.bind(this);
+    this.auth = auth;
   }
 
-  login(userId){
-    this.setState({
-      authenticated : true,
-      userId : userId,
-      accessType:'Free'
-    })
-  }
-
-  logout(){
-    this.setState({
-      authenticated: false,
-      userId : null,
-      accessType:'Free'
-    })
-  }
-
-  subscribe(){
-    this.setState({
-      accessType: 'Premium'
-    })
+  handleAuthentication = (props) => {
+    const location = props.location
+    if (/access_token|id_token|error/.test(location.hash)) {
+      this.auth.handleAuthentication()
+    }
   }
 
 
@@ -47,9 +33,12 @@ class App extends Component {
       <>
         <BrowserRouter>
           <Switch>
-            <Route exact path="/" render={(props) => <Home {...props} authStatus={this.state.authenticated} login={this.login}/>} />
-            <Route exact path="/library" render={(props) => <Library {...props} logout={this.logout} accessType={this.state.accessType} authStatus={this.state.authenticated}/>}/>
-            <Route exact path="/book/:id" render={(props) => <Book {...props} logout={this.logout} accessType={this.state.accessType} subscribe={this.subscribe} authStatus={this.state.authenticated}/>}/>
+            <Route exact path="/" render={(props) => <Home {...props} auth={this.auth}/>} />
+            <Route path="/callback" render={props => <Callback {...props} handleAuthentication={this.handleAuthentication}/> }/>
+            <Route exact path="/library" render={(props) => <Library {...props} auth={this.auth} />}/>
+            <Route exact path="/book/:id" render={(props) => <Book {...props} auth={this.auth} />}/>
+            <Route exact path="/addBook" render={(props) => <AddBook {...props} auth={this.auth} />}/>
+            
           </Switch>
         </BrowserRouter>
       </>      

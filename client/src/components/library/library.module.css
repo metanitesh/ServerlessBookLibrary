@@ -40,7 +40,7 @@
   margin: 10px;
   text-align: center;
   width: 200px;
-  height: 410px;
+  max-height: 550px;
   
 }
 
@@ -66,4 +66,33 @@
 
 .read{
   font-size:16px;
+}
+
+.addBook{
+  background: #67E081;
+  color: black;
+  padding: 6px 20px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  top: 30px;
+  right: 120px;
+  font-size: 20px;
+  text-decoration: none;
+  border-radius: 5px;
+
+}
+
+.deleteButton{
+    margin :10px auto;
+    background: #67E081;
+    color: black;
+    padding: 15px 45px;
+    border: none;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    
 }

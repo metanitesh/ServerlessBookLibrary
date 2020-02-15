@@ -5,12 +5,13 @@
   align-items: center;
 }
 
-.button{
+.loginButton{
   background: #67E081;
   color: black;
   padding: 15px 45px;
   border: none;
   font-weight: bold;
+  
   border-radius: 5px;
   cursor: pointer;
   font-size: 28px;

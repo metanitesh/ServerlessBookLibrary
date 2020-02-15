@@ -10,24 +10,14 @@ class Home extends Component {
   }
   
   componentDidMount(){
-    if(this.props.authStatus){
+    if(this.props.auth.isAuthenticated()){
       this.props.history.push('/library');
     }
   }
 
   login(e){
     e.preventDefault();
-    const url = 'https://ancient-springs-73658.herokuapp.com/auth';
-
-    fetch(url, {
-      method: 'POST'
-    })
-    .then((response) => response.json())
-    .then((response) => {
-      this.props.login(response.user_id);
-      this.props.history.push('/library');
-    })
-
+    this.props.auth.login()
   }
 
   render() {
@@ -36,7 +26,7 @@ class Home extends Component {
       <Header pageName='Log in'/>
       <main className={style.main}>
         <form onSubmit={this.login}>
-          <button id='login' className={style.button}>Login</button>
+          <button id='login' className={style.loginButton}>Login</button>
         </form>
       </main>
       </>

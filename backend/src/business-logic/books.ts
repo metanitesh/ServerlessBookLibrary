@@ -14,6 +14,10 @@ export async function getAllBooks(): Promise<Book[]>{
   return bookAccess.getAllBooks()
 }
 
+export async function getBook(bookId: string): Promise<Book>{
+  return bookAccess.getBook(bookId);
+}
+
 // export async function getAllTodos(userId: string): Promise<Todo[]>{
 //   return bookAccess.getAllTodos(userId)
 // }

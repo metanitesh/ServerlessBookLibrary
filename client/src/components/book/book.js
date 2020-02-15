@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Header from '../header/header'
 import style from './book.module.css'
+import {getBooksById} from "../api/library"
 
 class Book extends Component {
   _isRedirect = false;
@@ -10,61 +11,42 @@ class Book extends Component {
     this.state = {
       book:{}
     }
-    this.logout = this.logout.bind(this);
   }
 
   componentWillMount(){
-    if(!this.props.authStatus){
+    if(!this.props.auth.isAuthenticated()){
       this.props.history.push('/')
       this._isRedirect = true;
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     if(!this._isRedirect){
-    fetch(`https://ancient-springs-73658.herokuapp.com/books/${this.props.match.params.id}`)
-      .then((response) => {
-        return response.json();
-      })
-      .then((myJson) =>{
-        this.setState({
-          book: myJson
-        })
-      });
+      const bookId = this.props.match.params.id
+      const idToken = this.props.auth.getIdToken()
+
+      const result = await getBooksById(idToken, bookId);
+      this.setState({
+        book: result
+      })  
+
     }
   }
 
-  subscribe(){
-    this.props.subscribe();
-  }
 
-  logout(){
-    this.props.logout();
-    this.props.history.push('/')   
-  }
 
   render() {
-    let cta = '';
-    if(this.props.accessType === 'Free'){
-      cta = 
-        <section className={style.ctaScreen}> 
-          <button onClick= {this.props.subscribe} className={style.button}>Subscribe to Read</button>
-        </section>
-    }
-    
-    
 
     return (
       <>
 
-      <Header pageName="Discover Books" accessType= {this.props.accessType}/>
-      <button className='logout' onClick={this.logout}> logout </button>
+      
+      <button className='logout' onClick={this.props.auth.logout}> logout </button>
       <main className={style.container}>
         <h1 className={style.heading}>{this.state.book.title || 'loading...'}</h1>
-        <p className={style.paragraph}>{this.state.book.content}</p>
-        <p className={style.paragraph}>{this.state.book.content}</p>
+        <p className={style.paragraph}>{this.state.book.description}</p>
       </main>
-      {cta}
+      
       </>
     );
   }

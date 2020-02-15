@@ -7,7 +7,7 @@ class Header extends Component {
     return (
       <header className={style.header}> 
         <Link to="/library"><img className={style.logo} alt="logo" src="/Blinkist-Logo.png" /></Link>
-        <h6>{this.props.accessType} User { this.props.pageName}</h6> 
+        
       </header>
     );
   }

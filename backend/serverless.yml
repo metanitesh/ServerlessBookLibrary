@@ -96,10 +96,31 @@ functions:
     events:
       - http:
           method: get
+          authorizer: Auth
           path: books
           cors: true
 
-          
+  GetBook:
+    handler: src/lambda/http/getBook.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LIBRARY_TABLE}
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
+        Resource: "*"
+      
+    events:
+      - http:
+          method: get
+          authorizer: Auth
+          path: books/{bookId}
+          cors: true
+      
+                  
 
   # TODO: Configure this function
   CreateBook:
