@@ -18,9 +18,6 @@ export async function getBook(bookId: string): Promise<Book>{
   return bookAccess.getBook(bookId);
 }
 
-// export async function getAllTodos(userId: string): Promise<Todo[]>{
-//   return bookAccess.getAllTodos(userId)
-// }
 
 export async function createBook(event: APIGatewayProxyEvent): Promise<Book>{
   
