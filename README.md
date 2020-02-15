@@ -27,7 +27,8 @@ sls deploy -v
 ```
 
 ### Screenshot of app
-![screeshot](https://github.com/metanitesh/Serverless-ToDo/blob/master/app.png "screeshot")
+![screeshot](https://github.com/metanitesh/Serverless-ToDo/blob/master/library-app.png "screeshot")
 
 ### Screenshot of xray tracing 
-![screeshot](https://github.com/metanitesh/Serverless-ToDo/blob/master/xray.png "screeshot")# ServerlessBookLibrary
+![screeshot](https://github.com/metanitesh/Serverless-ToDo/blob/master/x-ray.png "screeshot")
+
