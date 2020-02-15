@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+Array [
+  <header
+    className="header"
+  >
+    <a
+      href="/library"
+      onClick={[Function]}
+    >
+      <img
+        alt="logo"
+        className="logo"
+        src="/Blinkist-Logo.png"
+      />
+    </a>
+    <h6>
+       User 
+      Log in
+    </h6>
+  </header>,
+  <main
+    className="main"
+  >
+    <form
+      onSubmit={[Function]}
+    >
+      <button
+        className="button"
+        id="login"
+      >
+        Login
+      </button>
+    </form>
+  </main>,
+]
+`;
